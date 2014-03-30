@@ -8,11 +8,6 @@ writer = csv.writer(sys.stdout, delimiter=',', quotechar='"')
 
 for line in reader:
 
-	body = line[4]
-        if (len(body) > 0):
-	  if (body.count('.') + body.count('!') + body.count('?') < 2) \
-            & ((body[len(body)-1] == '.') \
-            | (body[len(body)-1] == '!') \
-            | (body[len(body)-1] == '?')) \
-            | (body.count('.') + body.count('!') + body.count('?') < 1):
-	        print line[0] , "\t" , line[4]
+	tags = line[2].strip().split()
+	for tag in tags:
+		print tag

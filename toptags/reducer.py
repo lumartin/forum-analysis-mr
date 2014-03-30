@@ -2,24 +2,29 @@
 
 import sys
 
-hitsTotal = 0
-topSite = None
-topHits = 0
 oldKey = None
-
+hits = 0
+tagFreqList = []
 
 for line in sys.stdin:
-    thisKey = line.strip().split()
+	thisKey = line.strip().split()
 
-	hitsTotal += 1
-	if hitsTotal > topHits:
-	   topHits = hitsTotal
-           topSite = oldKey
-        oldKey = thisKey;
-        hitsTotal = 0
-    
-    oldKey = thisKey
-    hitsTotal += 1 
+	if oldKey and oldKey != thisKey:
+		tagFreqList.append([oldKey, hits])
+		hits = 0
+	
+	oldKey = thisKey
+	hits += 1
 
-print topSite, "\t", topHits
+if oldKey != None:
+	tagFreqList.append([oldKey, hits])
+
+tagFreqList.sort(key=lambda tup: tup[1])
+top10 = tagFreqList[len(tagFreqList)-10 : len(tagFreqList)]
+
+for tuple in reversed(top10):
+	print tuple
+
+
+
 
