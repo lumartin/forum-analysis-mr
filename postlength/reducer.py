@@ -3,25 +3,38 @@
 import sys
 
 oldKey = None
-pageList = list()
+questionLength = 0
 count = 0
+totalLength = 0
+
 
 for line in sys.stdin:
-    data_mapped = line.strip().split("\t")
+	data_mapped = line.strip().split("\t")
+	node, type, length = data_mapped
+	if oldKey and node != oldKey:
+		if count > 0:
+			mean = totalLength/count
+		else: 
+			mean = 0
+		print oldKey , "\t" , questionLength , "\t" , mean
+		questionLength = 0
+		count = 0
+		totalLength = 0
 
-    word, node = data_mapped
-    if oldKey and word.strip() != oldKey:
-	print oldKey , "\t" , len(pageList) , "\t" , count , "\t", pageList
-	pageList = list()
-	count = 0
+	oldKey = node
+    	if type.strip() == 'answer':
+		count += 1
+		totalLength += float(length)
+	else:
+		questionLength = int(length)
 
-    oldKey = word.strip()
-    pageList.append(node.strip())
-    count += 1
-    
 
 if oldKey != None:
-    print oldKey , "\t" , len(pageList) , "\t" , pageList
+	if count > 0:
+		mean = totalLength/count
+	else:
+		mean = 0
+	print oldKey , "\t" , questionLength , "\t" , mean
 
 
 
